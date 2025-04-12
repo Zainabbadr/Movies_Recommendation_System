@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class MovieManager {
     private Map<String, Set<String>> movieGenres = new HashMap<>();
@@ -7,17 +8,33 @@ public class MovieManager {
 
     public boolean loadMovies(List<String> movieData) {
         for (int i = 0; i < movieData.size(); i += 2) {
-            String[] movieInfo = movieData.get(i).split(",");
-            String[] genres = movieData.get(i + 1).split(",");
-            String title = movieInfo[0];
-            String id = movieInfo[1];
+            String[] info = movieData.get(i).split(",");
+            if (info.length < 2) continue;
+            String title = info[0];
+            String id = info[1];
 
-            if (!validateMovieTitle(title) || !validateMovieId(id, title)) {
+            if (!title.matches("([A-Z][a-z]*)( [A-Z][a-z]*)*")) {
+                FileHandler.writeFile("recommendations.txt", "ERROR: Movie Title " + title + " is wrong");
+                return false;
+            }
+
+            String expectedPrefix = title.replaceAll("[^A-Z]", "");
+            String idPrefix = id.replaceAll("\\d", "");
+            String digits = id.replaceAll("\\D", "");
+            Set<String> uniqueDigits = new HashSet<>(Arrays.asList(digits.split("")));
+
+            if (!idPrefix.equals(expectedPrefix)) {
+                FileHandler.writeFile("recommendations.txt", "ERROR: Movie Id letters " + id + " are wrong");
+                return false;
+            }
+
+            if (uniqueDigits.size() != digits.length()) {
+                FileHandler.writeFile("recommendations.txt", "ERROR: Movie Id numbers " + id + " aren’t unique");
                 return false;
             }
 
             movieTitles.put(id, title);
-            for (String genre : genres) {
+            for (String genre : movieData.get(i + 1).split(",")) {
                 movieGenres.computeIfAbsent(id, k -> new HashSet<>()).add(genre);
                 genreToMovies.computeIfAbsent(genre, k -> new HashSet<>()).add(id);
             }
@@ -35,17 +52,5 @@ public class MovieManager {
 
     public String getTitle(String movieId) {
         return movieTitles.get(movieId);
-    }
-
-    private boolean validateMovieTitle(String title) {
-        return title.matches("([A-Z][a-z]*)( [A-Z][a-z]*)*");
-    }
-
-    private boolean validateMovieId(String movieId, String title) {
-        String expectedPrefix = title.replaceAll("[^A-Z]", "");
-        String idPrefix = movieId.replaceAll("\\d", "");
-        String idNumbers = movieId.replaceAll("\\D", "");
-        if (!idPrefix.equals(expectedPrefix)) return false;
-        return new HashSet<>(Arrays.asList(idNumbers.split(""))).size() == idNumbers.length();
     }
 }
