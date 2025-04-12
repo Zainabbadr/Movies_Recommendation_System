@@ -14,15 +14,8 @@ public class RecommendationEngine {
             MovieManager movieManager = new MovieManager();
             UserManager userManager = new UserManager();
 
-            if (!movieManager.loadMovies(movieData)) {
-                FileHandler.writeFile(OUTPUT_FILE, "ERROR: Invalid movie data");
-                return;
-            }
-
-            if (!userManager.validateUsers(userData)) {
-                FileHandler.writeFile(OUTPUT_FILE, "ERROR: Invalid user data");
-                return;
-            }
+            if (!movieManager.loadMovies(movieData)) return;
+            if (!userManager.validateUsers(userData)) return;
 
             try (BufferedWriter writer = FileHandler.getBufferedWriter(OUTPUT_FILE)) {
                 for (int i = 0; i < userData.size(); i += 2) {
@@ -53,7 +46,7 @@ public class RecommendationEngine {
             }
 
         } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error writing to file: " + e.getMessage());
         }
     }
 }
