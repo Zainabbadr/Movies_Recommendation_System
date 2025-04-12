@@ -3,20 +3,22 @@ import java.util.*;
 
 public class FileHandler {
     public static List<String> readFile(String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
         List<String> lines = new ArrayList<>();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            lines.add(line);
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line.trim());
+            }
         }
-        reader.close();
         return lines;
     }
 
-    public static void writeFile(String filename, String content) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-        writer.write(content);
-        writer.close();
+    public static void writeFile(String filename, String message) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(message + "\n");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
 
     public static BufferedWriter getBufferedWriter(String filename) throws IOException {
