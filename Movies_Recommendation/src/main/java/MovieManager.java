@@ -4,6 +4,7 @@ public class MovieManager {
     private Map<String, Set<String>> movieGenres = new HashMap<>();
     private Map<String, String> movieTitles = new HashMap<>();
     private Map<String, Set<String>> genreToMovies = new HashMap<>();
+    private MovieValidation movieValidation = new MovieValidation();
 
     public boolean loadMovies(List<String> movieData) {
         for (int i = 0; i < movieData.size(); i += 2) {
@@ -12,7 +13,7 @@ public class MovieManager {
             String title = movieInfo[0];
             String id = movieInfo[1];
 
-            if (!validateMovieTitle(title) || !validateMovieId(id, title)) {
+            if (!movieValidation.validateMovieTitle(title) || !movieValidation.validateMovieId(id, title)) {
                 return false;
             }
 
@@ -35,17 +36,5 @@ public class MovieManager {
 
     public String getTitle(String movieId) {
         return movieTitles.get(movieId);
-    }
-
-    private boolean validateMovieTitle(String title) {
-        return title.matches("([A-Z][a-z]*)( [A-Z][a-z]*)*");
-    }
-
-    private boolean validateMovieId(String movieId, String title) {
-        String expectedPrefix = title.replaceAll("[^A-Z]", "");
-        String idPrefix = movieId.replaceAll("\\d", "");
-        String idNumbers = movieId.replaceAll("\\D", "");
-        if (!idPrefix.equals(expectedPrefix)) return false;
-        return new HashSet<>(Arrays.asList(idNumbers.split(""))).size() == idNumbers.length();
     }
 }
