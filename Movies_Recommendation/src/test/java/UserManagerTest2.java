@@ -158,14 +158,12 @@ public class UserManagerTest2 {
         id = "123G4567K";
         assertFalse("Return value should be False", userManager.validateUserId(id));
     }
-    
+
     @Test
     public void validateUsers_validData() {
         List<String> userData = new ArrayList<>();
         userData.add("John Doe,123456789");
-//        userData.add("movie data"); // Simulating movie data
         userData.add("Jane Smith,987654321");
-//        userData.add("movie data"); // Simulating movie data
 
         assertTrue("Should validate successfully", userManager.validateUsers(userData));
     }
