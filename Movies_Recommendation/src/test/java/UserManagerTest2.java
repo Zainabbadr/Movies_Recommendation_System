@@ -33,7 +33,6 @@ public class UserManagerTest2 {
         assertTrue("Method should return true for a valid two-word username", userManager.validateUserTitle(userName));
     }
 
-    // Add test for multiple words
     @Test
     public void validName_multipleWords() {
         userName = "John Doe Smith";
@@ -64,7 +63,7 @@ public class UserManagerTest2 {
         assertFalse("Method should return false for an invalid username with multiple problems", userManager.validateUserTitle(userName));
     }
 
-    // Add test for empty name    @Test
+    @Test
     public void invalidName_empty() {
         userName = "";
         assertFalse("Method should return false for an empty username", userManager.validateUserTitle(userName));
@@ -90,7 +89,6 @@ public class UserManagerTest2 {
 
     @Test
     public void invalidId_notUnique() {
-        // First add a valid ID
         id = "123456789";
         assertTrue("First validation should succeed", userManager.validateUserId(id));
 
