@@ -24,69 +24,68 @@ public class UserManagerTest2 {
     @Test
     public void validName_singleWord() {
         userName = "Username";
-        assertTrue("Return value should be True", userManager.validateUserTitle(userName));
+        assertTrue("Method should return true for a valid single-word username", userManager.validateUserTitle(userName));
     }
 
     @Test
     public void validName_twoWords() {
         userName = "Correct Username";
-        assertTrue("Return value should be True", userManager.validateUserTitle(userName));
+        assertTrue("Method should return true for a valid two-word username", userManager.validateUserTitle(userName));
     }
 
     // Add test for multiple words
     @Test
     public void validName_multipleWords() {
         userName = "John Doe Smith";
-        assertTrue("Return value should be True", userManager.validateUserTitle(userName));
+        assertTrue("Method should return true for a valid multi-word username", userManager.validateUserTitle(userName));
     }
 
     @Test
     public void invalidName_startWithSpace() {
         userName = " Space Username";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username starting with space", userManager.validateUserTitle(userName));
     }
 
     @Test
     public void invalidName_specialChar() {
         userName = "Wrong$username";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username with special characters", userManager.validateUserTitle(userName));
     }
 
     @Test
     public void invalidName_number() {
         userName = "Wrong7username";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username with numbers", userManager.validateUserTitle(userName));
     }
 
     @Test
     public void invalidName_combined() {
         userName = " Wrong7Username@";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username with multiple problems", userManager.validateUserTitle(userName));
     }
 
-    // Add test for empty name
-    @Test
+    // Add test for empty name    @Test
     public void invalidName_empty() {
         userName = "";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an empty username", userManager.validateUserTitle(userName));
     }
 
     @Test
     public void validId_lowercaseLetter() {
         id = "12345678a";
-        assertTrue("Return value should be True", userManager.validateUserId(id));
+        assertTrue("Method should return true for a valid ID format", userManager.validateUserId(id));
     }
 
     @Test
     public void validId_uppercaseLetter() {
         id = "12345678A";
-        assertTrue("Return value should be True", userManager.validateUserId(id));
+        assertTrue("Method should return true for a valid ID format", userManager.validateUserId(id));
     }
 
     @Test
     public void validId_allNumbers() {
         id = "123456789";
-        assertTrue("Return value should be True", userManager.validateUserId(id));
+        assertTrue("Method should return true for a valid ID format", userManager.validateUserId(id));
     }
 
     @Test
@@ -102,61 +101,61 @@ public class UserManagerTest2 {
     @Test
     public void invalidId_moreThan9() {
         id = "1234567899";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID length", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_specialChar() {
         id = "12345678&";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with special characters", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_combined() {
         id = "123456789$";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with multiple problems", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_8nums() {
         id = "12345678";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with insufficient length", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_6nums() {
         id = "123456";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with insufficient length", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_empty() {
         id = "";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an empty ID", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_letterAtStart() {
         id = "J12345678";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_letterAtRandom() {
         id = "123K45678";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_letterAtStartAndEnd() {
         id = "A1234567k";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
     }
 
     @Test
     public void invalidId_letterAtRandomAndEnd() {
         id = "123G4567K";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
     }
 
     @Test
@@ -165,7 +164,7 @@ public class UserManagerTest2 {
         userData.add("John Doe,123456789");
         userData.add("Jane Smith,987654321");
 
-        assertTrue("Should validate successfully", userManager.validateUsers(userData));
+        assertTrue("Method should return true for valid user data", userManager.validateUsers(userData));
     }
 
     @Test
