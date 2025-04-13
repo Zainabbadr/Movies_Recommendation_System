@@ -53,26 +53,26 @@
             <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- ByteBuddy (required by Mockito) -->
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.12.14</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy-agent</artifactId>
-            <version>1.12.14</version>
-            <scope>test</scope>
-        </dependency>
+<!--        &lt;!&ndash; ByteBuddy (required by Mockito) &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>net.bytebuddy</groupId>-->
+<!--            <artifactId>byte-buddy</artifactId>-->
+<!--            <version>1.12.14</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>net.bytebuddy</groupId>-->
+<!--            <artifactId>byte-buddy-agent</artifactId>-->
+<!--            <version>1.12.14</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
-        <!-- Objenesis (required by Mockito) -->
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>3.3</version>
-            <scope>test</scope>
-        </dependency>
+<!--        &lt;!&ndash; Objenesis (required by Mockito) &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.objenesis</groupId>-->
+<!--            <artifactId>objenesis</artifactId>-->
+<!--            <version>3.3</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 </project>
