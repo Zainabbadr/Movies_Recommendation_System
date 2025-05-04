@@ -32,7 +32,7 @@ public class TestRealFileHandlerWithManager {
         // Prepare valid movie  data
         validMovieData = fileHandler.readFile("validMovies.txt");
         // Prepare invalid movie  data
-        invalidMovieData  = fileHandler.readFile("invalidMovies.txt");;
+        invalidMovieData  = fileHandler.readFile("invalidMovies.txt");
 
         // Prepare valid user data
         validUserData = fileHandler.readFile("validUsers.txt");
