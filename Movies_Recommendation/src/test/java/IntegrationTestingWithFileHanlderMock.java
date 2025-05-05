@@ -1,15 +1,13 @@
-package com.example;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
-public class TestFileHandlerMockWithManager {
+public class IntegrationTestingWithFileHanlderMock {
 
     private List<String> validMovieData;
     private List<String> invalidMovieData;
@@ -24,9 +22,8 @@ public class TestFileHandlerMockWithManager {
     @Before
     public void setUp() throws IOException {
         // Initialize mock and managers
-        fileHandler = mock(FileHandler.class);
-        movieManager = new MovieManager();
-        userManager = new UserManager();
+        fileHandler = Mockito.mock(FileHandler.class);
+
 
         // Prepare valid movie mock data
         validMovieData = Arrays.asList(
@@ -63,38 +60,47 @@ public class TestFileHandlerMockWithManager {
                 "TS789"
         );
 
-        // Default behavior for tests (can be overridden per test)
-        when(fileHandler.readFile("movie")).thenReturn(validMovieData);
-        when(fileHandler.readFile("user")).thenReturn(validUserData);
+        // Configure default returns
+        Mockito.when(fileHandler.readFile("movie")).thenReturn(validMovieData);
+        Mockito.when(fileHandler.readFile("user")).thenReturn(validUserData);
+
+        // CRUCIAL: Inject the mock into both managers
+        movieManager = new MovieManager(fileHandler, "movie");
+        userManager = new UserManager(fileHandler, "user");
+
     }
 
     @Test
-    public void testValidLoadMoviesAndGetByGenre() throws IOException {
-        boolean movieLoaded = movieManager.loadMovies(fileHandler.readFile("movie"));
-        assertTrue("Movie loading failed", movieLoaded);
+    public void testValidLoadMoviesAndGetByGenre() {
+        movieManager.readMovies();
+        boolean movieLoaded = movieManager.loadMovies();
+        Assert.assertTrue("Movie loading failed", movieLoaded);
 
         String[]  actionMovies =  movieManager.getMoviesByGenre("action").toArray(new String[0]);
         String[] expected = {"TM123", "I124"};
-        assertArrayEquals("Action genre movies mismatch", expected, actionMovies);
+        Assert.assertArrayEquals("Action genre movies mismatch", expected, actionMovies);
     }
     @Test
     public void testInvalidLoadMovies() throws IOException {
-        when(fileHandler.readFile("movie")).thenReturn(invalidMovieData);
-        boolean movieLoaded = movieManager.loadMovies(fileHandler.readFile("movie"));
-        assertFalse("Invalid Movie data should fail validation", movieLoaded);
+        Mockito.when(fileHandler.readFile("movie")).thenReturn(invalidMovieData);
+        movieManager.readMovies();
+        boolean movieLoaded = movieManager.loadMovies();
+        Assert.assertFalse("Invalid Movie data should fail validation", movieLoaded);
 
 
     }
     @Test
-    public void testValidateUsersWithValidData() throws IOException {
-        boolean usersValid = userManager.validateUsers(fileHandler.readFile("user"));
-        assertTrue("Valid user data should pass validation", usersValid);
+    public void testValidateUsersWithValidData()  {
+        userManager.readUsers();
+        boolean usersValid = userManager.validateUsers();
+        Assert.assertTrue("Valid user data should pass validation", usersValid);
     }
 
     @Test
     public void testValidateUsersWithInvalidData() throws IOException {
-        when(fileHandler.readFile("user")).thenReturn(invalidUserData);
-        boolean usersValid = userManager.validateUsers(fileHandler.readFile("user"));
-        assertFalse("Invalid user data should fail validation", usersValid);
+        Mockito.when(fileHandler.readFile("user")).thenReturn(invalidUserData);
+        userManager.readUsers();
+        boolean usersValid = userManager.validateUsers();
+        Assert.assertFalse("Invalid user data should fail validation", usersValid);
     }
 }

@@ -1,4 +1,3 @@
-package com.example;
 import java.util.*;
 import java.io.*;
 
@@ -6,8 +5,25 @@ public class MovieManager {
     private final Map<String, Set<String>> movieGenres = new HashMap<>();
     private final Map<String, String> movieTitles = new HashMap<>();
     private final Map<String, Set<String>> genreToMovies = new HashMap<>();
+    List<String> movieData;
 
-    public boolean loadMovies(List<String> movieData) {
+    private final FileHandler fileHandler;
+   public String filename;
+    public MovieManager(FileHandler fileHandler,String filename){
+        this.fileHandler=fileHandler;
+        this.filename=filename;
+
+
+    }
+    public void readMovies(){
+        try {
+            this.movieData= fileHandler.readFile(filename);
+        }catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+    public boolean loadMovies() {
+
         for (int i = 0; i < movieData.size(); i += 2) {
             String[] info = movieData.get(i).split(",");
             if (info.length < 2) continue;
