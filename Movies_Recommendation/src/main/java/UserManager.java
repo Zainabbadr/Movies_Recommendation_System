@@ -3,8 +3,22 @@ import java.io.*;
 
 public class UserManager {
     private Set<String> seenUserIds = new HashSet<>();
+    List<String> userData;
+    public String filename;
+    FileHandler fileHandler;
+    public   UserManager(FileHandler fileHandler,String filename){
+        this.fileHandler=fileHandler;
+        this.filename=filename;
 
-    public boolean validateUsers(List<String> userData) {
+    }
+    public void readUsers(){
+        try {
+            this.userData= fileHandler.readFile(filename);
+        }catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+    public boolean validateUsers() {
         for (int i = 0; i < userData.size(); i += 2) {
             String[] info = userData.get(i).split(",");
             if (info.length < 2) continue;
