@@ -182,27 +182,27 @@ public class MovieManagerTest {
     @Test
     public void test_getGenre()
     {
-        List<String> movieData = Arrays.asList("Inception,I124",
+        movieManager.movieData=Arrays.asList("Inception,I124",
                 "action,thriller");
-        movieManager.loadMovies(movieData);
+        movieManager.loadMovies();
         assertEquals(new HashSet<>(Arrays.asList("action", "thriller")), movieManager.getGenres("I124"));
     }
 
     @Test
     public void test_getMoviesByGenre()
     {
-        List<String> movieData = Arrays.asList("Inception,I124",
+        movieManager.movieData= Arrays.asList("Inception,I124",
                 "action,thriller");
-        boolean result = movieManager.loadMovies(movieData);
+        boolean result = movieManager.loadMovies();
         assertTrue(result);
         assertTrue(movieManager.getMoviesByGenre("action").contains("I124"));
     }
     @Test
     public void test_getTitle()
     {
-        List<String> movieData = Arrays.asList("Inception,I124",
+        movieManager.movieData = Arrays.asList("Inception,I124",
                 "action,thriller");
-        boolean result = movieManager.loadMovies(movieData);
+        boolean result = movieManager.loadMovies();
         assertTrue(result);
 
         assertEquals("Inception", movieManager.getTitle("I124"));
@@ -210,13 +210,13 @@ public class MovieManagerTest {
     @Test
     public void testLoadMovies_validData()
     {
-        List<String> movieData = Arrays.asList(
+        movieManager.movieData = Arrays.asList(
                 "The Matrix,TM123" ,
                 "action,sci-fi" ,
                 "Inception,I124" ,
                 "action,thriller"
         );
-        boolean result = movieManager.loadMovies(movieData);
+        boolean result = movieManager.loadMovies();
         assertTrue("Method should return false for invalid movie data", result);
         assertEquals(new HashSet<>(Arrays.asList("action", "thriller")), movieManager.getGenres("I124"));
         assertTrue(movieManager.getMoviesByGenre("action").contains("TM123"));
@@ -225,38 +225,38 @@ public class MovieManagerTest {
     @Test
     public void testLoadMovies_invalidTitle()
     {
-        List<String> movieData = Arrays.asList(
+        movieManager.movieData = Arrays.asList(
                 "The matrix,TM123" ,
                 "action,sci-fi"
         );
-        boolean result = movieManager.loadMovies(movieData);
+        boolean result = movieManager.loadMovies();
         assertFalse("Method should return false for invalid movie title",result);
     }
     @Test
     public void testLoadMovies_wrongPrefixID()
     {
-        List<String> movieData = Arrays.asList(
+        movieManager.movieData= Arrays.asList(
                 "The matrix,I123" ,
                 "action,sci-fi"
         );
-        boolean result = movieManager.loadMovies(movieData);
+        boolean result = movieManager.loadMovies();
         assertFalse("Method should return false for wrong prefix id", result);
     }
     @Test
     public void testLoadMovies_nonUniqueNumberID()
     {
-        List<String> movieData = Arrays.asList(
+        movieManager.movieData = Arrays.asList(
                 "The matrix,TM113" ,
                 "action,sci-fi"
         );
-        boolean result = movieManager.loadMovies(movieData);
+        boolean result = movieManager.loadMovies();
         assertFalse("Method should return false for non unique numbers id", result);
     }
     @Test
     public void testLoadMovies_emptyList()
     {
-        List<String> movieData = new ArrayList<>();
-        boolean result = movieManager.loadMovies(movieData);
+        movieManager.movieData = new ArrayList<>();
+        boolean result = movieManager.loadMovies();
         assertTrue("Method should return true for empty list ", result);
     }
 

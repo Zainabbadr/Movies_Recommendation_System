@@ -7,14 +7,17 @@ public class MovieManager {
     private final Map<String, Set<String>> genreToMovies = new HashMap<>();
     List<String> movieData;
 
-    private final FileHandler fileHandler;
+    private  FileHandler fileHandler;
    public String filename;
+
+    public MovieManager(){
+
+    }
     public MovieManager(FileHandler fileHandler,String filename){
         this.fileHandler=fileHandler;
         this.filename=filename;
-
-
     }
+
     public void readMovies(){
         try {
             this.movieData= fileHandler.readFile(filename);

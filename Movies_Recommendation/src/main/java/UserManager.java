@@ -11,6 +11,10 @@ public class UserManager {
         this.filename=filename;
 
     }
+    public   UserManager(){
+
+
+    }
     public void readUsers(){
         try {
             this.userData= fileHandler.readFile(filename);

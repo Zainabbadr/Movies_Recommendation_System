@@ -1,7 +1,13 @@
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class UserManagerTest {
     private UserManager userManager;
@@ -9,139 +15,216 @@ public class UserManagerTest {
     private String id;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         userManager = new UserManager();
     }
 
+    // Missing testcase 1 - single word name
     @Test
-    // Testcase 2
-    public void validName_twoWords(){
-        userName = "Correct Username";
-        assertTrue("Return value should be True", userManager.validateUserTitle(userName));
+    public void validName_singleWord() {
+        userName = "Username";
+        assertTrue("Method should return true for a valid single-word username", userManager.validateUserTitle(userName));
     }
 
-    // Testcase 3
+    @Test
+    public void validName_twoWords() {
+        userName = "Correct Username";
+        assertTrue("Method should return true for a valid two-word username", userManager.validateUserTitle(userName));
+    }
+
+    @Test
+    public void validName_multipleWords() {
+        userName = "John Doe Smith";
+        assertTrue("Method should return true for a valid multi-word username", userManager.validateUserTitle(userName));
+    }
+
     @Test
     public void invalidName_startWithSpace() {
         userName = " Space Username";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username starting with space", userManager.validateUserTitle(userName));
     }
 
-    // Testcase 4
     @Test
-    public void invalidName_specialChar(){
+    public void invalidName_specialChar() {
         userName = "Wrong$username";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username with special characters", userManager.validateUserTitle(userName));
     }
 
-    // Testcase 5
     @Test
-    public void invalidName_number(){
+    public void invalidName_number() {
         userName = "Wrong7username";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username with numbers", userManager.validateUserTitle(userName));
     }
 
-    // Testcase 6
     @Test
-    public void invalidName_combined(){
+    public void invalidName_combined() {
         userName = " Wrong7Username@";
-        assertFalse("Return value should be False", userManager.validateUserTitle(userName));
+        assertFalse("Method should return false for an invalid username with multiple problems", userManager.validateUserTitle(userName));
     }
 
-    // Testcase 7
     @Test
-    public void validId_lowercaseLetter(){
+    public void invalidName_empty() {
+        userName = "";
+        assertFalse("Method should return false for an empty username", userManager.validateUserTitle(userName));
+    }
+
+    @Test
+    public void validId_lowercaseLetter() {
         id = "12345678a";
-        assertTrue("Return value should be True", userManager.validateUserId(id));
+        assertTrue("Method should return true for a valid ID format", userManager.validateUserId(id));
     }
 
-    // Testcase 8
     @Test
-    public void validId_uppercaseLetter(){
+    public void validId_uppercaseLetter() {
         id = "12345678A";
-        assertTrue("Return value should be True", userManager.validateUserId(id));
+        assertTrue("Method should return true for a valid ID format", userManager.validateUserId(id));
     }
 
-    // Testcase 9
     @Test
-    public void validId_allNumbers(){
+    public void validId_allNumbers() {
         id = "123456789";
-        assertTrue("Return value should be True", userManager.validateUserId(id));
+        assertTrue("Method should return true for a valid ID format", userManager.validateUserId(id));
     }
 
-    // Testcase 10
     @Test
-    public void invalidId_notUnique(){
+    public void invalidId_notUnique() {
+        id = "123456789";
+        assertTrue("First validation should succeed", userManager.validateUserId(id));
 
+        // Then try to add the same ID again
+        assertFalse("Duplicate ID should fail validation", userManager.validateUserId(id));
     }
 
-    // Testcase 11
     @Test
-    public void invalidId_moreThan9(){
+    public void invalidId_moreThan9() {
         id = "1234567899";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID length", userManager.validateUserId(id));
     }
 
-    // Testcase 12
     @Test
-    public void invalidId_specialChar(){
+    public void invalidId_specialChar() {
         id = "12345678&";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with special characters", userManager.validateUserId(id));
     }
 
-    // Testcase 13
     @Test
-    public void invalidId_combined(){
+    public void invalidId_combined() {
         id = "123456789$";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with multiple problems", userManager.validateUserId(id));
     }
 
-    // Testcase 14
     @Test
-    public void invalidId_8nums(){
+    public void invalidId_8nums() {
         id = "12345678";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with insufficient length", userManager.validateUserId(id));
     }
 
-    // Testcase 15
     @Test
-    public void invalidId_6nums(){
+    public void invalidId_6nums() {
         id = "123456";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID with insufficient length", userManager.validateUserId(id));
     }
 
-    // Testcase 16
     @Test
-    public void invalidId_empty(){
+    public void invalidId_empty() {
         id = "";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an empty ID", userManager.validateUserId(id));
     }
 
-    // Testcase 17
     @Test
-    public void invalidId_letterAtStart(){
+    public void invalidId_letterAtStart() {
         id = "J12345678";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
     }
 
-    // Testcase 18
     @Test
-    public void invalidId_letterAtRandom(){
+    public void invalidId_letterAtRandom() {
         id = "123K45678";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
     }
 
-    // Testcase 19
     @Test
-    public void invalidId_letterAtStartAndEnd(){
+    public void invalidId_letterAtStartAndEnd() {
         id = "A1234567k";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
     }
 
-    // Testcase 20
     @Test
-    public void invalidId_letterAtRandomAndEnd(){
+    public void invalidId_letterAtRandomAndEnd() {
         id = "123G4567K";
-        assertFalse("Return value should be False", userManager.validateUserId(id));
+        assertFalse("Method should return false for an invalid ID format", userManager.validateUserId(id));
+    }
+
+    @Test
+    public void validateUsers_validData() {
+        List<String> userData = new ArrayList<>();
+        userData.add("John Doe,123456789");
+        userData.add("Jane Smith,987654321");
+        userManager.userData=userData;
+        assertTrue("Method should return true for valid user data", userManager.validateUsers());
+    }
+
+    @Test
+    public void validateUsers_invalidName() {
+        List<String> userData = new ArrayList<>();
+        userData.add("John123,123456789");
+        userManager.userData=userData;
+        assertFalse("Should fail validation due to invalid name", userManager.validateUsers());
+    }
+
+    @Test
+    public void validateUsers_invalidId() {
+        List<String> userData = new ArrayList<>();
+        userData.add("John Doe,12345");
+        userManager.userData=userData;
+        assertFalse("Should fail validation due to invalid ID", userManager.validateUsers());
+    }
+
+    @Test
+    public void validateUsers_duplicateId() {
+        List<String> userData = new ArrayList<>();
+        userData.add("John Doe,123456789");
+        userData.add("Jane Smith,123456789"); // Duplicate ID
+        userManager.userData=userData;
+        assertFalse("Should fail validation due to duplicate ID", userManager.validateUsers());
+    }
+
+    @Test
+    public void validateUsers_emptyList() {
+        List<String> userData = new ArrayList<>();
+        userManager.userData=userData;
+        assertTrue("Empty list should validate successfully", userManager.validateUsers());
+    }
+
+    @Test
+    public void validateUsers_invalidFormat() {
+        List<String> userData = new ArrayList<>();
+        userData.add("Invalid Format");
+        userData.add("movie data");
+        userManager.userData=userData;
+        assertTrue("Should handle invalid format gracefully", userManager.validateUsers());
+    }
+
+    // Test with mocking FileHandler to verify error messages
+    @Test
+    public void testFileHandlerCalled_invalidName() {
+        try (MockedStatic<FileHandler> mockedFileHandler = Mockito.mockStatic(FileHandler.class)) {
+            userName = "Invalid$Name";
+            userManager.validateUserTitle(userName);
+
+            mockedFileHandler.verify(() ->
+                    FileHandler.writeFile(eq("recommendations.txt"), contains("ERROR: User Name Invalid$Name is wrong")));
+        }
+    }
+
+    @Test
+    public void testFileHandlerCalled_invalidId() {
+        try (MockedStatic<FileHandler> mockedFileHandler = Mockito.mockStatic(FileHandler.class)) {
+            id = "12345";
+            userManager.validateUserId(id);
+
+            mockedFileHandler.verify(() ->
+                    FileHandler.writeFile(eq("recommendations.txt"), contains("ERROR: User Id 12345 is wrong")));
+        }
     }
 }

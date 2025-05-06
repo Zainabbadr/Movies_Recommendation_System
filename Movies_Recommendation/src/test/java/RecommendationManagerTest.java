@@ -9,7 +9,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class RecommendationEngineTest {
+public class RecommendationManagerTest {
 
     // Enable ByteBuddy experimental mode for Java 23 compatibility
     static {
@@ -21,19 +21,19 @@ public class RecommendationEngineTest {
     private BufferedWriter mockWriter;
 
     // Custom RecommendationEngine for testing that allows injecting mocks
-    private static class TestableRecommendationEngine extends RecommendationEngine {
+    private static class TestableRecommendationEngine extends RecommendationManager {
         public TestableRecommendationEngine(MovieManager movieManager, UserManager userManager) {
-            super();
-            this.movieManager = movieManager;
-            this.userManager = userManager;
+            super(movieManager,userManager);
+//            this.movieManager = movieManager;
+//            this.userManager = userManager;
         }
 
         // Make fields accessible for the test
-        private final MovieManager movieManager;
-        private final UserManager userManager;
+//        private final MovieManager movieManager;
+//        private final UserManager userManager;
     }
 
-    private TestableRecommendationEngine engine;
+    private TestableRecommendationEngine reccomendManager;
 
     @BeforeEach
     public void setUp() {
@@ -41,63 +41,67 @@ public class RecommendationEngineTest {
         movieManager = mock(MovieManager.class);
         userManager = mock(UserManager.class);
         mockWriter = mock(BufferedWriter.class);
-        engine = new TestableRecommendationEngine(movieManager, userManager);
+        reccomendManager = new TestableRecommendationEngine(movieManager, userManager);
     }
 
     @Test
     public void testLoadMovies_Success() {
         // Arrange
         List<String> movieData = Arrays.asList("Movie Title,MT123", "Action,Comedy");
-        when(movieManager.loadMovies(movieData)).thenReturn(true);
+        when(movieManager.loadMovies()).thenReturn(true);
 
         // Act
-        boolean result = engine.loadMovies(movieData);
+        boolean result = reccomendManager.loadMovies(movieData);
 
         // Assert
         assertTrue(result);
-        verify(movieManager).loadMovies(movieData);
+        movieManager.movieData=movieData;
+        verify(movieManager).loadMovies();
     }
 
     @Test
     public void testLoadMovies_Failure() {
         // Arrange
         List<String> movieData = Arrays.asList("Invalid Movie,IM123", "Drama");
-        when(movieManager.loadMovies(movieData)).thenReturn(false);
+        when(movieManager.loadMovies()).thenReturn(false);
 
         // Act
-        boolean result = engine.loadMovies(movieData);
+        boolean result = reccomendManager.loadMovies(movieData);
 
         // Assert
         assertFalse(result);
-        verify(movieManager).loadMovies(movieData);
+        movieManager.movieData=movieData;
+        verify(movieManager).loadMovies();
     }
 
     @Test
     public void testValidateUsers_Success() {
         // Arrange
         List<String> userData = Arrays.asList("John Doe,123456789", "MT123,AB456");
-        when(userManager.validateUsers(userData)).thenReturn(true);
+        when(userManager.validateUsers()).thenReturn(true);
 
         // Act
-        boolean result = engine.validateUsers(userData);
+        boolean result = reccomendManager.validateUsers(userData);
 
         // Assert
         assertTrue(result);
-        verify(userManager).validateUsers(userData);
+        userManager.userData=userData;
+        verify(userManager).validateUsers();
     }
 
     @Test
     public void testValidateUsers_Failure() {
         // Arrange
         List<String> userData = Arrays.asList("Invalid User,12345", "MT123");
-        when(userManager.validateUsers(userData)).thenReturn(false);
+        when(userManager.validateUsers()).thenReturn(false);
 
         // Act
-        boolean result = engine.validateUsers(userData);
+        boolean result = reccomendManager.validateUsers(userData);
 
         // Assert
         assertFalse(result);
-        verify(userManager).validateUsers(userData);
+        userManager.userData=userData;
+        verify(userManager).validateUsers();
     }
 
     @Test
@@ -133,7 +137,8 @@ public class RecommendationEngineTest {
                     .thenReturn(mockWriter);
 
             // Act
-            engine.generateRecommendations(userData);
+            reccomendManager.userManager.userData=userData;
+            reccomendManager.recommend();
 
             // Assert - verify writer was called with user info
             verify(mockWriter).write("John Doe,123456789\n");
@@ -159,7 +164,8 @@ public class RecommendationEngineTest {
                     .thenReturn(mockWriter);
 
             // Act
-            engine.generateRecommendations(userData);
+            reccomendManager.userManager.userData=userData;
+            reccomendManager.recommend();
 
             // Assert
             verify(mockWriter).write("John Doe,123456789\n");

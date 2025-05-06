@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class FileHandler {
-    public  List<String> readFile(String filename) throws IOException {
+    public static List<String> readFile(String filename) throws IOException {
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
