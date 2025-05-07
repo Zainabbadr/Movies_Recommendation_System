@@ -66,6 +66,12 @@ public class MovieManager {
             return false;
         }
 
+        //NEW CHECK: Ensure exactly 3 digits
+        if (idDigits.length() != 3) {
+            FileHandler.writeFile("recommendations.txt", "ERROR: Movie Id digits in " + movieId + " must be exactly 3");
+            return false;
+        }
+
         Set<Character> uniqueDigits = new HashSet<>();
         for (char c : idDigits.toCharArray()) {
             if (!uniqueDigits.add(c)) {
