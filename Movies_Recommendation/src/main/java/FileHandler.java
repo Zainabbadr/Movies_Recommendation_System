@@ -24,4 +24,12 @@ public class FileHandler {
     public static BufferedWriter getBufferedWriter(String filename) throws IOException {
         return new BufferedWriter(new FileWriter(filename));
     }
+
+    public static void appendToFile(String filename, String message) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            writer.write(message + "\n");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
 }
