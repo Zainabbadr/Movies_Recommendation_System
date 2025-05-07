@@ -44,4 +44,15 @@ public class DecisionTableTesting {
         String[] actual=movieManager.movieData.toArray(new String[0]);
         Assert.assertArrayEquals("Error in Movie ID", expected, actual);
     }
+
+    public void NoMatchingMoviesTest(){
+        String[] expected={
+                "Alice Smith,12345678A",
+                "No Recommendations",
+                "Bob Brown,87654321B",
+                "The Bear,Up"
+        };
+        String[] actual=movieManager.movieData.toArray(new String[0]);
+        Assert.assertArrayEquals("Error in Movie ID", expected, actual);
+    }
 }
