@@ -24,14 +24,17 @@ public class BvaTest {
     MovieManager movieManager = new MovieManager(new FileHandler(), "movies.txt");
     @Test
     public void testValidMovieId() {
+
         assertTrue(movieManager.validateMovieId("U123", "Up"));
     }
     @Test
     public void testTooFewDigits() {
+
         assertFalse(movieManager.validateMovieId("U12", "Up"));
     }
     @Test
     public void testTooManyDigits() {
+
         assertFalse(movieManager.validateMovieId("U1234", "Up"));
     }
 }
