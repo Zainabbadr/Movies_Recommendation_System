@@ -1,33 +1,54 @@
+// BranchCoverage.java
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BranchCoverage {
 
     @Test
-    void testValidateMovieTitle_Valid() {
+    void testValidMovieId_AllBranchesPass() {
         MovieManager mm = new MovieManager();
-        assertTrue(mm.validateMovieTitle("Inception"));
+        String movieId = "ABC123";
+        String title = "Awesome Big Cinema";
+        assertTrue(mm.validateMovieId(movieId, title));
     }
 
     @Test
-    void testValidateMovieTitle_Invalid() {
+    void testInvalidPrefix() {
         MovieManager mm = new MovieManager();
-        String title = "Incepti*n";
-        assertFalse(mm.validateMovieTitle(title));
-        String expected = MovieManager.ERROR_MOVIE_TITLE.replace("{movie_title}", title);
+        String movieId = "XYZ123";
+        String title = "Awesome Big Cinema";
+        assertFalse(mm.validateMovieId(movieId, title));
+        String expected = MovieManager.ERROR_MOVIE_ID_LETTERS.replace("{movie_id}", movieId);
         assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
     }
 
     @Test
-    void testValidateUserId_ValidAndInvalid() {
-        UserManager um = new UserManager();
+    void testTooFewDigits() {
+        MovieManager mm = new MovieManager();
+        String movieId = "ABC12";
+        String title = "Awesome Big Cinema";
+        assertFalse(mm.validateMovieId(movieId, title));
+        String expected = MovieManager.ERROR_MOVIE_ID_DIGITS_COUNT.replace("{movie_id}", movieId);
+        assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
+    }
 
-        String validId = "12345678A";
-        assertTrue(um.validateUserId(validId));
+    @Test
+    void testTooManyDigits() {
+        MovieManager mm = new MovieManager();
+        String movieId = "ABC1234";
+        String title = "Awesome Big Cinema";
+        assertFalse(mm.validateMovieId(movieId, title));
+        String expected = MovieManager.ERROR_MOVIE_ID_DIGITS_COUNT.replace("{movie_id}", movieId);
+        assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
+    }
 
-        String invalidId = "1234A";
-        assertFalse(um.validateUserId(invalidId));
-        String expected = UserManager.ERROR_USER_ID.replace("{user_id}", invalidId);
+    @Test
+    void testDuplicateDigits() {
+        MovieManager mm = new MovieManager();
+        String movieId = "ABC121";
+        String title = "Awesome Big Cinema";
+        assertFalse(mm.validateMovieId(movieId, title));
+        String expected = MovieManager.ERROR_MOVIE_ID_NUMBERS.replace("{movie_id}", movieId);
         assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
     }
 }
