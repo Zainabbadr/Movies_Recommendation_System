@@ -5,7 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 public class IntegrationTesting {
@@ -25,7 +31,7 @@ public class IntegrationTesting {
         movieManager.readMovies();
     }
 @Test
-    public void validateMovieData(){
+    public void validateMovieDataFromFileHandler(){
         String[] expected={
                 "The Matrix,TM123",
                 "action,sci-fi",
@@ -48,7 +54,7 @@ public class IntegrationTesting {
         Assert.assertArrayEquals("movies mismatch", expected, actual);
     }
     @Test
-    public void testValidLoadMoviesAndGetByGenre()  {
+    public void testValidLoadMoviesAndGetByGenreFromFileHandler()  {
         boolean movieLoaded = movieManager.loadMovies();
         Assert.assertTrue("Movie loading failed", movieLoaded);
         String[]  actionMovies =  movieManager.getMoviesByGenre("horror").toArray(new String[0]);
@@ -56,14 +62,14 @@ public class IntegrationTesting {
         Assert.assertArrayEquals("Action genre movies mismatch", expected, actionMovies);
     }
     @Test
-    public void testInvalidLoadMovies()  {
+    public void testInvalidLoadMoviesFromFileHandler()  {
         movieManager.filename="invalidMovies.txt";
         movieManager.readMovies();
         boolean movieLoaded = movieManager.loadMovies();
         Assert.assertFalse("Invalid Movie data should fail validation", movieLoaded);
     }
     @Test
-    public void validateUserData(){
+    public void validateUserDataFromFileHandler(){
         String[] expected={
                 "Alice Smith,12345678A",
                 "TM123,I142",
@@ -74,18 +80,66 @@ public class IntegrationTesting {
         Assert.assertArrayEquals("users mismatch", expected, actual);
     }
     @Test
-    public void testValidateUsersWithValidData()  {
+    public void testValidateUsersWithValidDataFromFileHandler()  {
         boolean usersValid = userManager.validateUsers();
         Assert.assertTrue("Valid user data should pass validation", usersValid);
     }
 
     @Test
-    public void testValidateUsersWithInvalidData() {
+    public void testValidateUsersWithInvalidDataFromFileHandler() {
         userManager.filename="invalidUsers.txt";
         userManager.readUsers();
         boolean usersValid = userManager.validateUsers();
         Assert.assertFalse("Invalid user data should fail validation", usersValid);
     }
+    @Test
+    public void testValidateUsersIntegration() {
+
+        RecommendationManager reccomendManager=new RecommendationManager(movieManager,userManager);
+        //actual
+        String[] actual={
+                "Alice Smith,12345678A",
+                "TM123,I142",
+                "Bob Brown,87654321B",
+                "TS789"
+        };
+        // expected
+        List<String> result = reccomendManager.getUsers();
+        String[] expected=result.toArray(new String[0]);
+        // Assert
+        Assert.assertArrayEquals("output mismatch",expected,actual);
+    }
+    @Test
+    public void testValidateMoviesIntegration() {
+
+        RecommendationManager reccomendManager=new RecommendationManager(movieManager,userManager);
+        //actual
+        String[] actual={
+                "The Matrix,TM123",
+                "action,sci-fi",
+                "Inception,I124",
+                "action,thriller",
+                "Toy Story,TS781",
+                "animation,comedy",
+                "Up,U423",
+                "animation",
+                "The Conjuring,TC201",
+                "horror",
+                "Interstellar,I142",
+                "sci-fi,drama",
+                "Saw,S201",
+                "horror",
+                "The Bear,TB789",
+                "comedy"
+        };
+        // expected
+        List<String> result = reccomendManager.getMovies();
+        String[] expected=result.toArray(new String[0]);
+        // Assert
+        Assert.assertArrayEquals("output mismatch",expected,actual);
+    }
+
+
     @Test
     public void testOutput() {
         RecommendationManager recommendationEngine=new RecommendationManager(movieManager,userManager);
@@ -101,7 +155,7 @@ public class IntegrationTesting {
 
     }
     @Test
-    public void testWriteOutput() {
+    public void testWriteOutputWithFileHandler() {
         String[] actualOutput = null;
         RecommendationManager recommendationEngine=new RecommendationManager(movieManager,userManager);
         List<String> output= recommendationEngine.recommend();

@@ -1,1 +1,1 @@
-ERROR: Movie Title inception is wrong
+ERROR: Movie Id digits in TS78 must be exactly 3

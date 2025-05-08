@@ -27,6 +27,7 @@ public class MovieManager {
     public MovieManager(FileHandler fileHandler,String filename){
         this.fileHandler=fileHandler;
         this.filename=filename;
+
     }
 
     public void readMovies(){

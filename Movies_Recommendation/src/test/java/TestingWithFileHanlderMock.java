@@ -7,14 +7,14 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class IntegrationTestingWithFileHanlderMock {
+public class TestingWithFileHanlderMock {
 
     private List<String> validMovieData;
     private List<String> invalidMovieData;
     private List<String> validUserData;
     private List<String> invalidUserData;
 
-    private FileHandler fileHandler;
+    private FileHandler fileHandlerMock;
 
     private MovieManager movieManager;
     private UserManager userManager;
@@ -22,7 +22,7 @@ public class IntegrationTestingWithFileHanlderMock {
     @Before
     public void setUp() throws IOException {
         // Initialize mock and managers
-        fileHandler = Mockito.mock(FileHandler.class);
+        fileHandlerMock = Mockito.mock(FileHandler.class);
 
 
         // Prepare valid movie mock data
@@ -31,7 +31,7 @@ public class IntegrationTestingWithFileHanlderMock {
                 "action,sci-fi",
                 "Inception,I124",
                 "action,thriller",
-                "Toy Story,TS78",
+                "Toy Story,TS781",
                 "animation,comedy"
         );
         // Prepare invalid movie mock data
@@ -61,12 +61,12 @@ public class IntegrationTestingWithFileHanlderMock {
         );
 
         // Configure default returns
-        Mockito.when(fileHandler.readFile("movie")).thenReturn(validMovieData);
-        Mockito.when(fileHandler.readFile("user")).thenReturn(validUserData);
+        Mockito.when(fileHandlerMock.readFile("movie")).thenReturn(validMovieData);
+        Mockito.when(fileHandlerMock.readFile("user")).thenReturn(validUserData);
 
         // CRUCIAL: Inject the mock into both managers
-        movieManager = new MovieManager(fileHandler, "movie");
-        userManager = new UserManager(fileHandler, "user");
+        movieManager = new MovieManager(fileHandlerMock, "movie");
+        userManager = new UserManager(fileHandlerMock, "user");
 
     }
 
@@ -82,7 +82,7 @@ public class IntegrationTestingWithFileHanlderMock {
     }
     @Test
     public void testInvalidLoadMovies() throws IOException {
-        Mockito.when(fileHandler.readFile("movie")).thenReturn(invalidMovieData);
+        Mockito.when(fileHandlerMock.readFile("movie")).thenReturn(invalidMovieData);
         movieManager.readMovies();
         boolean movieLoaded = movieManager.loadMovies();
         Assert.assertFalse("Invalid Movie data should fail validation", movieLoaded);
@@ -98,7 +98,7 @@ public class IntegrationTestingWithFileHanlderMock {
 
     @Test
     public void testValidateUsersWithInvalidData() throws IOException {
-        Mockito.when(fileHandler.readFile("user")).thenReturn(invalidUserData);
+        Mockito.when(fileHandlerMock.readFile("user")).thenReturn(invalidUserData);
         userManager.readUsers();
         boolean usersValid = userManager.validateUsers();
         Assert.assertFalse("Invalid user data should fail validation", usersValid);

@@ -13,6 +13,15 @@ public  RecommendationManager(MovieManager movieManager , UserManager userManage
         this.movieManager=movieManager;
         this.userManager=userManager;
 }
+    public List<String> getMovies() {
+
+        return movieManager.movieData;
+    }
+
+    public List<String> getUsers() {
+
+        return userManager.userData;
+    }
     public boolean loadMovies(List<String> movieData) {
     movieManager.movieData=movieData;
         return movieManager.loadMovies();

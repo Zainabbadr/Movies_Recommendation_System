@@ -15,7 +15,7 @@ public class FileHandlerTest {
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
-
+private FileHandler fileHandler;
     private File testFile;
     private String testFilePath;
 
@@ -24,6 +24,7 @@ public class FileHandlerTest {
         // Create a temporary file for testing
         testFile = tempFolder.newFile("test.txt");
         testFilePath = testFile.getAbsolutePath();
+        fileHandler=new FileHandler();
 
         // Initialize with some content
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
@@ -44,7 +45,7 @@ public class FileHandlerTest {
     @Test
     public void testReadFile_Success() throws IOException {
         // Step 1: Call the method
-        List<String> lines = FileHandler.readFile(testFilePath);
+        List<String> lines = fileHandler.readFile(testFilePath);
 
         // Step 2: Verify the results
         assertEquals("Should read 3 lines", 3, lines.size());
@@ -56,7 +57,7 @@ public class FileHandlerTest {
     @Test(expected = IOException.class)
     public void testReadFile_FileNotFound() throws IOException {
         // Step 1: Attempt to read a non-existent file
-        FileHandler.readFile("non_existent_file.txt");
+        fileHandler.readFile("non_existent_file.txt");
         // Step 2: The test should throw IOException
     }
 
@@ -66,7 +67,7 @@ public class FileHandlerTest {
         File emptyFile = tempFolder.newFile("empty.txt");
 
         // Step 2: Read the empty file
-        List<String> lines = FileHandler.readFile(emptyFile.getAbsolutePath());
+        List<String> lines = fileHandler.readFile(emptyFile.getAbsolutePath());
 
         // Step 3: Verify the result
         assertTrue("Should return an empty list for empty file", lines.isEmpty());
@@ -76,7 +77,7 @@ public class FileHandlerTest {
     public void testWriteFile_Success() throws IOException {
         // Step 1: Write to the file
         String message = "Test message";
-        FileHandler.writeFile(testFilePath, message);
+        fileHandler.writeFile(testFilePath, message);
 
         // Step 2: Read the file content to verify
         String content = new String(Files.readAllBytes(Paths.get(testFilePath)));
@@ -88,8 +89,8 @@ public class FileHandlerTest {
     @Test
     public void testWriteFile_AppendMultipleMessages() throws IOException {
         // Step 1: Write multiple messages
-        FileHandler.writeFile(testFilePath, "Message 1");
-        FileHandler.writeFile(testFilePath, "Message 2");
+        fileHandler.writeFile(testFilePath, "Message 1");
+        fileHandler.writeFile(testFilePath, "Message 2");
 
         // Step 2: Read the file content
         String content = new String(Files.readAllBytes(Paths.get(testFilePath)));
@@ -104,7 +105,7 @@ public class FileHandlerTest {
         String nonExistentPath = tempFolder.getRoot().getAbsolutePath() + "/non_existent_dir/file.txt";
 
         // Step 2: Write to the file (should catch IOException internally)
-        FileHandler.writeFile(nonExistentPath, "Test message");
+        fileHandler.writeFile(nonExistentPath, "Test message");
 
         // Step 3: Verify the file doesn't exist
         assertFalse("File should not be created in non-existent directory",
@@ -114,7 +115,7 @@ public class FileHandlerTest {
     @Test
     public void testGetBufferedWriter_Success() throws IOException {
         // Step 1: Get a BufferedWriter
-        BufferedWriter writer = FileHandler.getBufferedWriter(testFilePath);
+        BufferedWriter writer = fileHandler.getBufferedWriter(testFilePath);
 
         // Step 2: Use the writer
         writer.write("New content");
@@ -131,13 +132,13 @@ public class FileHandlerTest {
         String invalidPath = tempFolder.getRoot().getAbsolutePath() + "/non_existent_dir/file.txt";
 
         // Step 2: This should throw IOException
-        FileHandler.getBufferedWriter(invalidPath);
+        fileHandler.getBufferedWriter(invalidPath);
     }
 
     @Test
     public void testWriteFile_EmptyMessage() throws IOException {
         // Step 1: Write an empty message
-        FileHandler.writeFile(testFilePath, "");
+        fileHandler.writeFile(testFilePath, "");
 
         // Step 2: Read the content
         String content = new String(Files.readAllBytes(Paths.get(testFilePath)));
@@ -155,7 +156,7 @@ public class FileHandlerTest {
         }
 
         // Step 2: Read the file
-        List<String> lines = FileHandler.readFile(testFilePath);
+        List<String> lines = fileHandler.readFile(testFilePath);
 
         // Step 3: Verify the results
         assertEquals(2, lines.size());
@@ -174,7 +175,7 @@ public class FileHandlerTest {
         }
 
         // Step 2: Read the large file
-        List<String> lines = FileHandler.readFile(largeFile.getAbsolutePath());
+        List<String> lines = fileHandler.readFile(largeFile.getAbsolutePath());
 
         // Step 3: Verify the results
         assertEquals(1000, lines.size());
