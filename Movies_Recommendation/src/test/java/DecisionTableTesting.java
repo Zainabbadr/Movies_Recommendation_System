@@ -9,6 +9,7 @@ public class DecisionTableTesting {
 
     private MovieManager movieManager;
     private UserManager userManager;
+    private RecommendationManager recommendationManager;
 
     @Before
     public void setUp() throws IOException {
@@ -16,6 +17,7 @@ public class DecisionTableTesting {
         fileHandler =new FileHandler();
         movieManager = new MovieManager(fileHandler,"movies.txt");
         userManager = new UserManager(fileHandler,"users.txt");
+        recommendationManager = new RecommendationManager(movieManager, userManager);
         userManager.readUsers();
         movieManager.readMovies();
     }
