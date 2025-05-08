@@ -2,6 +2,13 @@ import java.util.*;
 import java.io.*;
 
 public class UserManager {
+    // --- Error Message Constants ---
+    public static final String ERROR_USER_NAME =
+        "ERROR: User Name {user_name} is wrong";
+    public static final String ERROR_USER_ID =
+        "ERROR: User Id {user_id} is wrong";
+
+    // --- Fields ---
     private Set<String> seenUserIds = new HashSet<>();
     List<String> userData;
     public String filename;
@@ -11,10 +18,8 @@ public class UserManager {
         this.filename=filename;
 
     }
-    public   UserManager(){
+    public   UserManager(){}
 
-
-    }
     public void readUsers(){
         try {
             this.userData= fileHandler.readFile(filename);
@@ -39,18 +44,26 @@ public class UserManager {
     }
 
     public boolean validateUserTitle(String userName) {
-        if (!userName.matches("[A-Za-z]+( [A-Za-z]+)*")) {
-            FileHandler.writeFile("recommendations.txt", "ERROR: User Name " + userName + " is wrong");
-            return false;
+        boolean ok = userName.matches("[A-Za-z]+( [A-Za-z]+)*");
+        if (!ok) {
+            FileHandler.writeFile(
+                "recommendations.txt",
+                ERROR_USER_NAME.replace("{user_name}", userName)
+            );
         }
-        return true;
+        return ok;
     }
 
     public boolean validateUserId(String userId) {
-        if (!userId.matches("\\d{8}[A-Za-z]?") || userId.length() != 9 || seenUserIds.contains(userId)) {
-            FileHandler.writeFile("recommendations.txt", "ERROR: User Id " + userId + " is wrong");
-            return false;
+        boolean ok = userId.matches("\\d{8}[A-Za-z]?")
+                && userId.length() == 9
+                && !seenUserIds.contains(userId);
+        if (!ok) {
+            FileHandler.writeFile(
+                "recommendations.txt",
+                ERROR_USER_ID.replace("{user_id}", userId)
+            );
         }
-        return true;
+        return ok;
     }
 }

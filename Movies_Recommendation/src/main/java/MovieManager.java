@@ -2,13 +2,24 @@ import java.util.*;
 import java.io.*;
 
 public class MovieManager {
+     // --- Error Message Constants ---
+    public static final String ERROR_MOVIE_TITLE =
+    "ERROR: Movie Title {movie_title} is wrong";
+    public static final String ERROR_MOVIE_ID_LETTERS =
+    "ERROR: Movie Id letters {movie_id} are wrong";
+    public static final String ERROR_MOVIE_ID_DIGITS_COUNT =
+    "ERROR: Movie Id digits in {movie_id} must be exactly 3";
+    public static final String ERROR_MOVIE_ID_NUMBERS =
+    "ERROR: Movie Id numbers {movie_id} aren’t unique";
+    
+     // --- Fields ---
     private final Map<String, Set<String>> movieGenres = new HashMap<>();
     private final Map<String, String> movieTitles = new HashMap<>();
     private final Map<String, Set<String>> genreToMovies = new HashMap<>();
     List<String> movieData;
 
     private  FileHandler fileHandler;
-   public String filename;
+    public String filename;
 
     public MovieManager(){
 
@@ -26,7 +37,6 @@ public class MovieManager {
         }
     }
     public boolean loadMovies() {
-
         for (int i = 0; i < movieData.size(); i += 2) {
             String[] info = movieData.get(i).split(",");
             if (info.length < 2) continue;
@@ -47,42 +57,53 @@ public class MovieManager {
         }
         return true;
     }
-
     public boolean validateMovieTitle(String title) {
-        if (!title.matches("([A-Z][a-z]*)( [A-Z][a-z]*)*")) {
-            FileHandler.writeFile("recommendations.txt", "ERROR: Movie Title " + title + " is wrong");
-            return false;
+        boolean ok = title.matches("([A-Z][a-z]*)( [A-Z][a-z]*)*");
+        if (!ok) {
+            FileHandler.writeFile(
+                "recommendations.txt",
+                ERROR_MOVIE_TITLE.replace("{movie_title}", title)
+            );
         }
-        return true;
+        return ok;
     }
 
     public boolean validateMovieId(String movieId, String title) {
         String expectedPrefix = title.replaceAll("[^A-Z]", "");
-        String idPrefix = movieId.replaceAll("\\d", "");
-        String idDigits = movieId.replaceAll("\\D", "");
+        String idPrefix       = movieId.replaceAll("\\d", "");
+        String idDigits       = movieId.replaceAll("\\D", "");
 
         if (!idPrefix.equals(expectedPrefix)) {
-            FileHandler.writeFile("recommendations.txt", "ERROR: Movie Id letters " + movieId + " are wrong");
+            FileHandler.writeFile(
+                "recommendations.txt",
+                ERROR_MOVIE_ID_LETTERS.replace("{movie_id}", movieId)
+            );
             return false;
         }
 
-        //NEW CHECK: Ensure exactly 3 digits
+        // NEW: exactly 3 digits required
         if (idDigits.length() != 3) {
-            FileHandler.writeFile("recommendations.txt", "ERROR: Movie Id digits in " + movieId + " must be exactly 3");
+            FileHandler.writeFile(
+                "recommendations.txt",
+                ERROR_MOVIE_ID_DIGITS_COUNT.replace("{movie_id}", movieId)
+            );
             return false;
         }
 
         Set<Character> uniqueDigits = new HashSet<>();
         for (char c : idDigits.toCharArray()) {
             if (!uniqueDigits.add(c)) {
-                FileHandler.writeFile("recommendations.txt", "ERROR: Movie Id numbers " + movieId + " aren’t unique");
+                FileHandler.writeFile(
+                    "recommendations.txt",
+                    ERROR_MOVIE_ID_NUMBERS.replace("{movie_id}", movieId)
+                );
                 return false;
             }
         }
 
         return true;
     }
-
+        // --- Getters ---
     public Set<String> getGenres(String movieId) {
         return movieGenres.getOrDefault(movieId, Collections.emptySet());
     }

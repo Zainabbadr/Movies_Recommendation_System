@@ -2,6 +2,8 @@ import java.util.*;
 
 public class RecommendationManager {
 
+    public static final String NO_RECOMMENDATIONS = "No Recommendations";
+
     private static final String OUTPUT_FILE = "recommendations.txt";
     MovieManager movieManager ;
     UserManager userManager ;
