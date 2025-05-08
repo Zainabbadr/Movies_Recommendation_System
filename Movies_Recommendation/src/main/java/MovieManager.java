@@ -3,14 +3,11 @@ import java.io.*;
 
 public class MovieManager {
      // --- Error Message Constants ---
-    public static final String ERROR_MOVIE_TITLE =
-    "ERROR: Movie Title {movie_title} is wrong";
-    public static final String ERROR_MOVIE_ID_LETTERS =
-    "ERROR: Movie Id letters {movie_id} are wrong";
-    public static final String ERROR_MOVIE_ID_DIGITS_COUNT =
-    "ERROR: Movie Id digits in {movie_id} must be exactly 3";
-    public static final String ERROR_MOVIE_ID_NUMBERS =
-    "ERROR: Movie Id numbers {movie_id} aren’t unique";
+    public static final String ERROR_MOVIE_TITLE = "ERROR: Movie Title {movie_title} is wrong";
+    public static final String ERROR_MOVIE_ID_LETTERS = "ERROR: Movie Id letters {movie_id} are wrong";
+    public static final String ERROR_MOVIE_ID_DIGITS_COUNT = "ERROR: Movie Id digits in {movie_id} must be exactly 3";
+    public static final String ERROR_MOVIE_ID_NUMBERS = "ERROR: Movie Id numbers {movie_id} aren’t unique";
+    
     
      // --- Fields ---
     private final Map<String, Set<String>> movieGenres = new HashMap<>();
@@ -21,9 +18,8 @@ public class MovieManager {
     private  FileHandler fileHandler;
     public String filename;
 
-    public MovieManager(){
-
-    }
+    public MovieManager(){}
+        
     public MovieManager(FileHandler fileHandler,String filename){
         this.fileHandler=fileHandler;
         this.filename=filename;

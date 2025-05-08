@@ -46,10 +46,7 @@ public class UserManager {
     public boolean validateUserTitle(String userName) {
         boolean ok = userName.matches("[A-Za-z]+( [A-Za-z]+)*");
         if (!ok) {
-            FileHandler.writeFile(
-                    "recommendations.txt",
-                    ERROR_USER_NAME.replace("{user_name}", userName)
-            );
+            FileHandler.writeFile("recommendations.txt",ERROR_USER_NAME.replace("{user_name}", userName));
         }
         return ok;
     }

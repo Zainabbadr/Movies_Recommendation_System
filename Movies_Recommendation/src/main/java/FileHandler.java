@@ -32,4 +32,12 @@ public class FileHandler {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
+    public static String readFirstLine(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            return reader.readLine();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+    
 }
