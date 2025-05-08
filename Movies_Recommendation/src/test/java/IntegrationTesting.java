@@ -31,7 +31,7 @@ public class IntegrationTesting {
                 "action,sci-fi",
                 "Inception,I124",
                 "action,thriller",
-                "Toy Story,TS78",
+                "Toy Story,TS781",
                 "animation,comedy",
                 "Up,U423",
                 "animation",

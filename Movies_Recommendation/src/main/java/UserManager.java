@@ -4,9 +4,9 @@ import java.io.*;
 public class UserManager {
     // --- Error Message Constants ---
     public static final String ERROR_USER_NAME =
-        "ERROR: User Name {user_name} is wrong";
+            "ERROR: User Name {user_name} is wrong";
     public static final String ERROR_USER_ID =
-        "ERROR: User Id {user_id} is wrong";
+            "ERROR: User Id {user_id} is wrong";
 
     // --- Fields ---
     private Set<String> seenUserIds = new HashSet<>();
@@ -47,21 +47,21 @@ public class UserManager {
         boolean ok = userName.matches("[A-Za-z]+( [A-Za-z]+)*");
         if (!ok) {
             FileHandler.writeFile(
-                "recommendations.txt",
-                ERROR_USER_NAME.replace("{user_name}", userName)
+                    "recommendations.txt",
+                    ERROR_USER_NAME.replace("{user_name}", userName)
             );
         }
         return ok;
     }
 
     public boolean validateUserId(String userId) {
-        boolean ok = userId.matches("\\d{8}[A-Za-z]?")
+        boolean ok = userId.matches("(\\d{9}|\\d{8}[A-Za-z])$")
                 && userId.length() == 9
                 && !seenUserIds.contains(userId);
         if (!ok) {
             FileHandler.writeFile(
-                "recommendations.txt",
-                ERROR_USER_ID.replace("{user_id}", userId)
+                    "recommendations.txt",
+                    ERROR_USER_ID.replace("{user_id}", userId)
             );
         }
         return ok;
