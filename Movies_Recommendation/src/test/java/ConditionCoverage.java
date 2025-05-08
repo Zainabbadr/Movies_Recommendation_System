@@ -16,7 +16,7 @@ public class ConditionCoverage {
         String name = "123Alice";
         assertFalse(um.validateUserTitle(name));
         String expected = UserManager.ERROR_USER_NAME.replace("{user_name}", name);
-        // assertEquals(expected, getFirstLineOfFile("recommendations.txt"));
+        assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
     }
 
     @Test
@@ -25,6 +25,6 @@ public class ConditionCoverage {
         String id = "12A";
         assertFalse(um.validateUserId(id));
         String expected = UserManager.ERROR_USER_ID.replace("{user_id}", id);
-        // assertEquals(expected, getFirstLineOfFile("recommendations.txt"));
+        assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
     }
 }
