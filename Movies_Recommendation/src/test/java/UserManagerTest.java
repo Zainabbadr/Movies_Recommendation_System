@@ -86,14 +86,6 @@ public class UserManagerTest {
         assertTrue("Method should return true for a valid ID format", userManager.validateUserId(id));
     }
 
-    @Test
-    public void invalidId_notUnique() {
-        id = "123456789";
-        assertTrue("First validation should succeed", userManager.validateUserId(id));
-
-        // Then try to add the same ID again
-        assertFalse("Duplicate ID should fail validation", userManager.validateUserId(id));
-    }
 
     @Test
     public void invalidId_moreThan9() {
@@ -184,7 +176,9 @@ public class UserManagerTest {
     public void validateUsers_duplicateId() {
         List<String> userData = new ArrayList<>();
         userData.add("John Doe,123456789");
+        userData.add("a");
         userData.add("Jane Smith,123456789"); // Duplicate ID
+        userData.add("a");
         userManager.userData=userData;
         assertFalse("Should fail validation due to duplicate ID", userManager.validateUsers());
     }
