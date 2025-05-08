@@ -84,7 +84,6 @@ public class IntegrationTesting {
         boolean usersValid = userManager.validateUsers();
         Assert.assertTrue("Valid user data should pass validation", usersValid);
     }
-
     @Test
     public void testValidateUsersWithInvalidDataFromFileHandler() {
         userManager.filename="invalidUsers.txt";
@@ -93,9 +92,9 @@ public class IntegrationTesting {
         Assert.assertFalse("Invalid user data should fail validation", usersValid);
     }
     @Test
-    public void testValidateUsersIntegration() {
+    public void ValidateUsersIntegrationWithRecommend() {
 
-        RecommendationManager reccomendManager=new RecommendationManager(movieManager,userManager);
+        RecommendationManager recommendManager=new RecommendationManager(movieManager,userManager);
         //actual
         String[] actual={
                 "Alice Smith,12345678A",
@@ -104,21 +103,18 @@ public class IntegrationTesting {
                 "TS789"
         };
         // expected
-        List<String> result = reccomendManager.getUsers();
+        List<String> result = recommendManager.getUsers();
         String[] expected=result.toArray(new String[0]);
         // Assert
         Assert.assertArrayEquals("output mismatch",expected,actual);
     }
     @Test
-    public void testValidateMoviesIntegration() {
+    public void ValidateMoviesIntegrationWithRecommend() {
 
-        RecommendationManager reccomendManager=new RecommendationManager(movieManager,userManager);
+        RecommendationManager recommendManager=new RecommendationManager(movieManager,userManager);
         //actual
         String[] actual={
-                "The Matrix,TM123",
-                "action,sci-fi",
-                "Inception,I124",
-                "action,thriller",
+                "The Matrix,TM123","action,sci-fi", "Inception,I124", "action,thriller",
                 "Toy Story,TS781",
                 "animation,comedy",
                 "Up,U423",
@@ -133,7 +129,7 @@ public class IntegrationTesting {
                 "comedy"
         };
         // expected
-        List<String> result = reccomendManager.getMovies();
+        List<String> result = recommendManager.getMovies();
         String[] expected=result.toArray(new String[0]);
         // Assert
         Assert.assertArrayEquals("output mismatch",expected,actual);
@@ -156,15 +152,16 @@ public class IntegrationTesting {
     }
     @Test
     public void testWriteOutputWithFileHandler() {
-        String[] actualOutput = null;
+        String[] actualOutput ;
         RecommendationManager recommendationEngine=new RecommendationManager(movieManager,userManager);
         List<String> output= recommendationEngine.recommend();
         String concatenatedOutput = String.join("\n", output);
-        fileHandler.writeFile("test.txt", concatenatedOutput);
+        FileHandler.writeFile("test.txt", concatenatedOutput);
         try {
             actualOutput = fileHandler.readFile("test.txt").toArray(new String[0]);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         String[] expectedOutput={
                 "Alice Smith,12345678A",
