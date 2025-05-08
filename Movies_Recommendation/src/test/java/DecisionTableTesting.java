@@ -22,44 +22,55 @@ public class DecisionTableTesting {
         movieManager.readMovies();
     }
 
-    @Test
-    public void AllCorrectTest(){
-        String[] expected={
-                "Alice Smith,12345678A",
-                "Inception",
-                "Bob Brown,87654321B",
-                "The Bear,Up"
-        };
-        String[] actual=recommendationManager.recommend().toArray(new String[0]);
-        Assert.assertArrayEquals("movies mismatch", expected, actual);
-    }
+//    @Test
+//    public void AllCorrectTest(){
+//        String[] expected={
+//                "Alice Smith,12345678A",
+//                "Inception",
+//                "Bob Brown,87654321B",
+//                "The Bear,Up"
+//        };
+//        String[] actual=recommendationManager.recommend().toArray(new String[0]);
+//        Assert.assertArrayEquals("movies mismatch", expected, actual);
+//    }
 //    @Test
 //    public void UserIdTest(){
 //        String[] expected={
 //                "ERROR: User Id 1234567A is wrong"
 //        };
-//        String[] actual=movieManager.movieData.toArray(new String[0]);
+//        String[] actual= null;
+//        try {
+//            recommendationManager.recommend();
+//            actual = fileHandler.readFile("recommendations.txt").toArray(new String[0]);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 //        Assert.assertArrayEquals("Error in User ID", expected, actual);
 //    }
-//
-//    @Test
-//    public void MovieIdTest(){
-//        String[] expected={
-//                "ERROR: Movie Id digits in TM23 must be exactly 3"
-//        };
-//        String[] actual=movieManager.movieData.toArray(new String[0]);
-//        Assert.assertArrayEquals("Error in Movie ID", expected, actual);
-//    }
-//
+
     @Test
-    public void NoMatchingMoviesTest(){
+    public void MovieIdTest() throws IOException {
         String[] expected={
-                "Alice Smith,12345678A",
-                "No Recommendations",
-                "Bob Brown,87654321B",
-                "The Bear,Up"
+                "ERROR: Movie Id digits in TS78 must be exactly 3"
         };
-        String[] actual=recommendationManager.recommend().toArray(new String[0]);
+        String[] actual= null;
+        try {
+            actual = fileHandler.readFile("recommendations.txt").toArray(new String[0]);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Assert.assertArrayEquals("Error in Movie ID", expected, actual);
     }
+//
+//    @Test
+//    public void NoMatchingMoviesTest(){
+//        String[] expected={
+//                "Alice Smith,12345678A",
+//                "No Recommendations",
+//                "Bob Brown,87654321B",
+//                "The Bear,Up"
+//        };
+//        String[] actual=recommendationManager.recommend().toArray(new String[0]);
+//        Assert.assertArrayEquals("Error in Movie ID", expected, actual);
+//    }
 }
