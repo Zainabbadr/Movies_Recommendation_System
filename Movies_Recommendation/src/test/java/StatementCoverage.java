@@ -80,5 +80,12 @@ public class StatementCoverage {
         String expected = MovieManager.ERROR_MOVIE_ID_DIGITS_COUNT.replace("{movie_id}", movieId);
         assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
     }
+    @Test
+    void testLikedMovieNotInList() {
+        MovieManager mm = new MovieManager();
+        String movieId = "M999";
+        String title = "Nonexistent";
+        assertFalse(mm.validateMovieId(movieId, title));
+    }
 
 }
