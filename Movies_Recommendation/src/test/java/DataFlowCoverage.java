@@ -1,4 +1,5 @@
 // DataFlowCoverage.java
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +13,10 @@ public class DataFlowCoverage {
     // idDigits         | def@N2 → use@N4, use@N6 (loop)
     // uniqueDigits     | def@N5 → use@N7 (add)
     // c (loop var)     | def@N6 → use@N7
+    @BeforeEach
+    void clearOutputFile() {
+        FileHandler.writeFile("recommendations.txt", "");
+    }
 
     @Test
     void testDefUse_expectedPrefix() {
@@ -54,4 +59,13 @@ public class DataFlowCoverage {
         MovieManager mm = new MovieManager();
         assertTrue(mm.validateMovieId("I456", "Inception"));
     }
+    @Test
+    void testDefUse_idDigitsTooLong() {
+        MovieManager mm = new MovieManager();
+        String movieId = "I1234";
+        assertFalse(mm.validateMovieId(movieId, "Inception"));
+        String expected = MovieManager.ERROR_MOVIE_ID_DIGITS_COUNT.replace("{movie_id}", movieId);
+        assertEquals(expected, FileHandler.readFirstLine("recommendations.txt"));
+    }
+
 }
